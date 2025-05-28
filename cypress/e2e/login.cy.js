@@ -1,8 +1,26 @@
 /// <reference types ="cypress"/>
 describe("Login page testing in appester portal", () => {
-  beforeEach("Login page testing", () => {
-    cy.visit("https://qa.appsteer.io/#/login");
-    cy.url().should("include", "https://qa.appsteer.io/");
+  // beforeEach("Login page testing", () => {
+  //   cy.visit("https://qa.appsteer.io/#/login");
+  //   cy.url().should("include", "https://qa.appsteer.io/");
+  // });
+  before(() => {
+    cy.login();
+    cy.log("application launched");
+    cy.saveLocalStorage()
+
+  });
+  // after(() => {
+  //   cy.clearLocalStorage();
+  //   cy.log("All local storage cleared");
+  // });
+
+  beforeEach(() => {
+    cy.restoreLocalStorage();
+  });
+
+  afterEach(() => {
+    cy.saveLocalStorage();
   });
   // it('apllication should be launched', () => {
 
@@ -38,18 +56,30 @@ describe("Login page testing in appester portal", () => {
   //   cy.get('input[placeholder="Password"]').type("Admin@123");
   // });
 
-  it("login button should be visible and enabled", () => {
-    cy.get(
-      'input[placeholder="Username"]'
-    ).type("UserTest123@qa.appsteer.io");
-    cy.get('input[placeholder="Password"]').type("Admin@123");
-    cy.get('[class="p-button-label"]').should("have.text", "LOGIN").click();
+  // it("login button should be visible and enabled", () => {
+  //   cy.visit("https://qa.appsteer.io/#/login");
+  //   cy.url().should("include", "https://qa.appsteer.io/");
+  //   cy.get('input[placeholder="Username"]').type("UserTest123@qa.appsteer.io");
+  //   cy.get('input[placeholder="Password"]').type("Admin@123");
+  //   cy.get('[class="p-button-label"]').should("have.text", "LOGIN").click();
 
-    cy.url().should("include", "https://qa.appsteer.io/user/#/u/menuforms/11542");
+  //   cy.url().should(
+  //     "include",
+  //     "https://qa.appsteer.io/user/#/u/menuforms/11542"
+  //   );
+  //   cy.get("[class='breadcrumb']").should("have.text", "Rk");
+  // });
+
+  it("validate user menu forms after login", () => {
+    cy.visit("https://qa.appsteer.io/user/#/u/menuforms/11542");
     cy.get("[class='breadcrumb']").should("have.text", "Rk");
 
+    cy.get('[class="p-inputtext p-component p-element ng-untouched ng-pristine ng-valid"]').type("appsteer");
+    
+
+    cy.get('[type="button"]').invoke('attr','type').should("have.length",6);
   });
-  
+
   //cy.url().should("contains", "/user/#/u/menuforms");
   //cy.wait(5000);
   // cy.visit(
